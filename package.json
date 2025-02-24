@@ -1,0 +1,27 @@
+{
+  "name": "430-project-1",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/npc5860/430-project-1#readme",
+  "bugs": {
+    "url": "https://github.com/npc5860/430-project-1/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/npc5860/430-project-1.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests complete\""
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.31.0"
+  }
+}
