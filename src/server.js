@@ -18,28 +18,27 @@ const postHandlers = {
 };
 
 const handlePost = (request, response, handler) => {
-  if (request.headers.get('Content-Type') === 'application/x-www-form-urlencoded') {
-    const body = [];
+  const body = [];
 
-    request.on('error', (error) => {
-      console.dir(error);
-      response.statusCode = 400;
-      response.end();
-    });
+  request.on('error', (error) => {
+    console.dir(error);
+    response.statusCode = 400;
+    response.end();
+  });
 
-    request.on('data', (chunk) => {
-      body.push(chunk);
-    });
+  request.on('data', (chunk) => {
+    body.push(chunk);
+  });
 
-    request.on('end', () => {
-      const bodyString = Buffer.concat(body).toString();
+  request.on('end', () => {
+    const bodyString = Buffer.concat(body).toString();
+    if (request.headers['content-type'] === 'application/json') {
+      request.body = JSON.parse(bodyString);
+    } else {
       request.body = query.parse(bodyString);
-      handler(request, response);
-    });
-  } else {
-    request.body = JSON.parse(request.body);
+    }
     handler(request, response);
-  }
+  });
 };
 
 const onRequest = (request, response) => {

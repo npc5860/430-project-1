@@ -68,18 +68,19 @@ const getBookTitles = (request, response) => {
 
 const addBook = (request, response) => {
   const object = {};
+  object.message = '';
   const post = request.body;
   let missingParameter = false;
+  if (!post.title) {
+    object.message += 'Title is required ';
+    missingParameter = true;
+  }
   if (!post.author) {
-    object.message += 'Author is required\n';
+    object.message += 'Author is required ';
     missingParameter = true;
   }
   if (!post.link) {
-    object.message += 'Link is required\n';
-    missingParameter = true;
-  }
-  if (!post.title) {
-    object.message += 'Title is required\n';
+    object.message += 'Link is required ';
     missingParameter = true;
   }
 
@@ -88,6 +89,10 @@ const addBook = (request, response) => {
     writeResponse(request, response, 400, object);
     return;
   }
+
+  post.pages = parseInt(post.pages, 10);
+  post.year = parseInt(post.year, 10);
+  post.genres = post.genres.split(',');
 
   const book = books.find((b) => b.title === post.title && b.author === post.author);
   if (book) {
@@ -117,7 +122,7 @@ const reviewBook = (request, response) => {
     writeResponse(request, response, 400, object);
     return;
   }
-  if (!post.review.rating) {
+  if (!post.rating) {
     const object = {
       message: 'Review rating is required',
       id: 'missingParameter',
@@ -125,6 +130,8 @@ const reviewBook = (request, response) => {
     writeResponse(request, response, 400, object);
     return;
   }
+
+  post.rating = parseInt(post.rating, 10);
 
   const book = books.find((b) => b.title === post.title);
   if (!book) {
@@ -139,7 +146,7 @@ const reviewBook = (request, response) => {
   if (!book.reviews) {
     book.reviews = [];
   }
-  book.reviews.push(post.review);
+  book.reviews.push(post.rating);
   writeResponse(request, response, 200, book);
 };
 

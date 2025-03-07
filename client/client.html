@@ -4,8 +4,179 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book API</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <script>
+        window.onload = () => {
+            document.querySelectorAll("form").forEach(form => {
+            form.addEventListener("submit", async e => {
+                e.preventDefault();
+                const data = new FormData(form);
+                const params = new URLSearchParams(data).toString();
+                const method = e.submitter.getAttribute("method");
+                const url = form.getAttribute("action") + (method !== "post" ? `?${params}` : "");
+                const response = await fetch(url, {
+                    method,
+                    headers: method === "post" ? {
+                        "Content-Type": "application/json"
+                    } : undefined,
+                    body: method === "post" ? JSON.stringify(Object.fromEntries(data)) : undefined
+                });
+                let html = "";
+                html += `Status: ${response.status}<br/>`;
+                html += `Content-Length: ${response.headers.get("Content-Length")}<br/>`;
+                if (method !== "head") {
+                    const text = await response.text();
+                    html += `Response: ${text.length > 300 ? text.substring(0, 300) + "..." : text}`;
+                }
+                form.lastElementChild.innerHTML = html;
+                return false;
+            });
+        });
+        };
+    </script>
 </head>
 <body>
-
+    <section class="section">
+        <div class="message is-dark">
+            <div class="message-header">
+                <p>/getBook</p>
+            </div>
+            <form action="./getBook" class="message-body">
+                <div class="field">
+                    <label class="label">Title</label>
+                    <input type="text" class="input" name="title">
+                </div>
+                <div class="field is-grouped">
+                    <button class="button is-primary" method="get">GET</button>
+                    <button class="button is-primary" method="head">HEAD</button>
+                </div>
+                <p></p>
+            </form>
+        </div>
+    </section>
+    <section class="section">
+        <div class="message is-dark">
+            <div class="message-header">
+                <p>/getBooks</p>
+            </div>
+            <form action="./getBooks" class="message-body">
+                <div class="field">
+                    <label class="label">Title</label>
+                    <input type="text" class="input" name="title">
+                </div>
+                <div class="field">
+                    <label class="label">Author</label>
+                    <input type="text" class="input" name="author">
+                </div>
+                <div class="field">
+                    <label class="label">Country</label>
+                    <input type="text" class="input" name="country">
+                </div>
+                <div class="field">
+                    <label class="label">Language</label>
+                    <input type="text" class="input" name="language">
+                </div>
+                <div class="field is-grouped">
+                    <button class="button is-primary" method="get">GET</button>
+                    <button class="button is-primary" method="head">HEAD</button>
+                </div>
+                <p></p>
+            </form>
+        </div>
+    </section>
+    <section class="section">
+        <div class="message is-dark">
+            <div class="message-header">
+                <p>/getAllBooks</p>
+            </div>
+            <form action="./getAllBooks" class="message-body">
+                <div class="field is-grouped">
+                    <button class="button is-primary" method="get">GET</button>
+                    <button class="button is-primary" method="head">HEAD</button>
+                </div>
+                <p></p>
+            </form>
+        </div>
+    </section>
+    <section class="section">
+        <div class="message is-dark">
+            <div class="message-header">
+                <p>/getBookTitles</p>
+            </div>
+            <form action="./getBookTitles" class="message-body">
+                <div class="field is-grouped">
+                    <button class="button is-primary" method="get">GET</button>
+                    <button class="button is-primary" method="head">HEAD</button>
+                </div>
+                <p></p>
+            </form>
+        </div>
+    </section>
+    <section class="section">
+        <div class="message is-dark">
+            <div class="message-header">
+                <p>/addBook</p>
+            </div>
+            <form action="./addBook" class="message-body">
+                <div class="field">
+                    <label class="label">Title</label>
+                    <input type="text" class="input" name="title">
+                </div>
+                <div class="field">
+                    <label class="label">Author</label>
+                    <input type="text" class="input" name="author">
+                </div>
+                <div class="field">
+                    <label class="label">Link</label>
+                    <input type="text" class="input" name="link">
+                </div>
+                <div class="field">
+                    <label class="label">Country</label>
+                    <input type="text" class="input" name="country">
+                </div>
+                <div class="field">
+                    <label class="label">Language</label>
+                    <input type="text" class="input" name="language">
+                </div>
+                <div class="field">
+                    <label class="label">Pages</label>
+                    <input type="number" class="input" name="pages">
+                </div>
+                <div class="field">
+                    <label class="label">Year</label>
+                    <input type="number" class="input" name="year">
+                </div>
+                <div class="field">
+                    <label class="label">Genres</label>
+                    <input type="text" class="input" name="genres">
+                </div>
+                <div class="field">
+                    <button class="button is-primary" method="post">POST</button>
+                </div>
+                <p></p>
+            </form>
+        </div>
+    </section>
+    <section class="section">
+        <div class="message is-dark">
+            <div class="message-header">
+                <p>/reviewBook</p>
+            </div>
+            <form action="./reviewBook" class="message-body">
+                <div class="field">
+                    <label class="label">Title</label>
+                    <input type="text" class="input" name="title">
+                </div>
+                <div class="field">
+                    <label class="label">Rating</label>
+                    <input type="number" class="input" name="rating">
+                </div>
+                <div class="field">
+                    <button class="button is-primary" method="post">POST</button>
+                </div>
+                <p></p>
+            </form>
+        </div>
+    </section>
 </body>
 </html>
